@@ -9,6 +9,7 @@ import { CENTER as SEED_CENTER } from '../services/seedData'
 import { statusIcon, youAreHereIcon } from '../components/map/mapIcons'
 import { ClickToPin } from '../components/map/ClickToPin'
 import { AddReportModal } from '../components/map/AddReportModal'
+import { DedupModal } from '../components/map/DedupModal'
 import { CatPopupContent } from '../components/map/CatPopupContent'
 import { STATUS_META } from '../services/statusMeta'
 
@@ -27,7 +28,7 @@ function latestSightingByCat(sightings) {
 export default function MapPage() {
   const { cats, sightings } = useData()
   const { position } = useGeolocation()
-  const { submitReport } = useReportSubmission()
+  const { submitReport, pending, confirmSameCat, confirmNewCat, cancelPending } = useReportSubmission()
   const mapRef = useRef(null)
   const [pendingPin, setPendingPin] = useState(null)
   const [submitting, setSubmitting] = useState(false)
@@ -44,10 +45,29 @@ export default function MapPage() {
       .filter(Boolean)
   }, [cats, sightings])
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = (values) => {
     setSubmitting(true)
-    submitReport(values)
+    const result = submitReport(values)
     setSubmitting(false)
+    if (result.status === 'created') {
+      setPendingPin(null)
+    }
+    // 'needs-review' keeps pendingPin (so the dropped pin stays visible)
+    // and hands off to the DedupModal via the `pending` state below.
+  }
+
+  const handleConfirmSame = (catId) => {
+    confirmSameCat(catId)
+    setPendingPin(null)
+  }
+
+  const handleConfirmNew = () => {
+    confirmNewCat()
+    setPendingPin(null)
+  }
+
+  const handleCancelDedup = () => {
+    cancelPending()
     setPendingPin(null)
   }
 
@@ -143,12 +163,21 @@ export default function MapPage() {
         Double-click the map to drop a pin, or use the + button
       </p>
 
-      {pendingPin && (
+      {pendingPin && !pending && (
         <AddReportModal
           coords={pendingPin}
           onCancel={() => setPendingPin(null)}
           onSubmit={handleSubmit}
           submitting={submitting}
+        />
+      )}
+
+      {pending && (
+        <DedupModal
+          candidates={pending.candidates}
+          onConfirmSame={handleConfirmSame}
+          onConfirmNew={handleConfirmNew}
+          onCancel={handleCancelDedup}
         />
       )}
     </div>

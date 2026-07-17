@@ -1,11 +1,15 @@
+import { useState } from 'react'
 import { useData } from '../context/DataContext'
+import { findDuplicateCandidates } from '../services/matching'
 
-// Directly creates a new cat + sighting from an Add Report form submission.
-// Phase 4 wraps this with a nearby-match check before it runs.
+// Handles the "Add Report" pipeline: checks for nearby matching cats first
+// (150m radius + attribute match), and only creates a brand-new cat record
+// once the user confirms it isn't a duplicate.
 export function useReportSubmission() {
-  const { addCat, addSighting } = useData()
+  const { addCat, addSighting, updateCat, findNearbySightings, getCatById } = useData()
+  const [pending, setPending] = useState(null) // { values, candidates }
 
-  const submitReport = (values) => {
+  const createNewCat = (values) => {
     const cat = addCat({
       name: values.name,
       status: values.status,
@@ -26,5 +30,51 @@ export function useReportSubmission() {
     return cat
   }
 
-  return { submitReport }
+  const linkToExistingCat = (catId, values) => {
+    addSighting({
+      cat_id: catId,
+      latitude: values.coords.latitude,
+      longitude: values.coords.longitude,
+      photo_url: values.photoDataUrl,
+      last_fed_date: values.lastFedAt,
+      notes: values.description,
+    })
+    if (values.needsMedical) {
+      updateCat(catId, {
+        needs_medical_attention: true,
+        medical_details: values.medicalDetails || undefined,
+      })
+    }
+  }
+
+  const submitReport = (values) => {
+    const candidates = findDuplicateCandidates(
+      { coords: values.coords, temperament: values.temperament, description: values.description },
+      { findNearbySightings, getCatById },
+    )
+
+    if (candidates.length > 0) {
+      setPending({ values, candidates })
+      return { status: 'needs-review' }
+    }
+
+    const cat = createNewCat(values)
+    return { status: 'created', cat }
+  }
+
+  const confirmSameCat = (catId) => {
+    if (!pending) return
+    linkToExistingCat(catId, pending.values)
+    setPending(null)
+  }
+
+  const confirmNewCat = () => {
+    if (!pending) return
+    createNewCat(pending.values)
+    setPending(null)
+  }
+
+  const cancelPending = () => setPending(null)
+
+  return { submitReport, pending, confirmSameCat, confirmNewCat, cancelPending }
 }
