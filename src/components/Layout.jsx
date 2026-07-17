@@ -4,7 +4,7 @@ import { MobileHeader } from './MobileHeader'
 
 export function Layout() {
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen w-screen overflow-hidden bg-paper">
       <DesktopSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <MobileHeader />

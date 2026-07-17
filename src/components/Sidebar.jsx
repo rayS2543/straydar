@@ -22,8 +22,8 @@ function NavItems({ onNavigate, layout }) {
             ? 'flex-col justify-center gap-1 px-2 py-2 text-[11px]'
             : 'px-3 py-2.5 text-sm font-medium',
           isActive
-            ? 'bg-emerald-100 text-emerald-800'
-            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+            ? 'bg-brand-soft text-brand'
+            : 'text-muted hover:bg-card-soft hover:text-ink',
         ].join(' ')
       }
     >
@@ -35,15 +35,17 @@ function NavItems({ onNavigate, layout }) {
 
 export function DesktopSidebar() {
   return (
-    <aside className="hidden md:flex md:w-60 md:flex-col md:border-r md:border-slate-200 md:bg-white md:px-3 md:py-5">
-      <div className="mb-6 flex items-center gap-2 px-2">
-        <PawPrint className="text-emerald-600" size={26} />
-        <span className="text-lg font-semibold text-slate-900">Straydar</span>
+    <aside className="hidden md:flex md:w-60 md:flex-col md:border-r md:border-line md:bg-card md:px-3 md:py-5">
+      <div className="mb-6 flex items-center gap-2.5 px-2">
+        <span className="relative flex h-7 w-7 items-center justify-center rounded-full border-[1.5px] border-brand">
+          <PawPrint className="text-brand" size={15} strokeWidth={2.5} />
+        </span>
+        <span className="text-lg font-semibold text-ink">Straydar</span>
       </div>
       <nav className="flex flex-1 flex-col gap-1">
         <NavItems layout="stacked" />
       </nav>
-      <p className="px-2 text-xs text-slate-400">
+      <p className="px-2 text-xs text-faint">
         Map, report, and help stray &amp; lost cats nearby.
       </p>
     </aside>
@@ -52,7 +54,7 @@ export function DesktopSidebar() {
 
 export function MobileTabBar() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 flex border-t border-slate-200 bg-white/95 backdrop-blur md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-30 flex border-t border-line bg-card/95 backdrop-blur md:hidden">
       <div className="flex w-full justify-around py-1">
         <NavItems layout="rail" />
       </div>

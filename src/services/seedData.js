@@ -1,5 +1,5 @@
 // Center of the seed area: Mission District, San Francisco.
-const CENTER = { latitude: 37.7599, longitude: -122.4148 }
+export const CENTER = { latitude: 37.7599, longitude: -122.4148 }
 
 const offset = (dLat, dLng) => ({
   latitude: CENTER.latitude + dLat,
