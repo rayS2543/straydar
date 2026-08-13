@@ -50,3 +50,17 @@ There is no test suite configured in this repo (no test runner, no `*.test.*`/`*
 - All Tailwind styling uses the custom theme tokens defined in `src/index.css` (`--color-paper`, `--color-ink`, `--color-brand`, `--color-status-*`, etc.) — use these token-based classes (e.g. `bg-brand`, `text-ink`, `border-line`) rather than raw Tailwind palette colors, to stay consistent with the existing UI.
 - Status colors/labels are centralized in `statusMeta.js`; don't hardcode status strings/colors elsewhere.
 - New cats always default `status` to `sighted_temporary` unless the flow explicitly sets otherwise (e.g. `MissingPage` sets `lost`).
+
+## Git workflow
+
+- Create a new branch for each feature/fix, don't work directly on main.
+- Ask before committing — show the diff first.
+- Ask before pushing.
+- Open a PR when the work is ready for review, don't merge automatically.
+
+## Before pushing
+
+- Run the test suite (or linter/build, whatever applies) before pushing any commit.
+- If tests fail, fix the issue before proceeding — don't push broken code.
+- If there's no test suite yet, at minimum run/build the code to confirm it executes without errors.
+- Flag if this step is skipped for any reason.
