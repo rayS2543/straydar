@@ -27,7 +27,7 @@ There is no test suite configured in this repo (no test runner, no `*.test.*`/`*
 - Components/pages never call `db.js` directly — they go through `useData()`.
 
 **Core domain model:**
-- A **cat** is a persistent identity record (`id`, `name`, `status`, `temperament`, `description`, `needs_medical_attention`, `medical_details`, `primary_photo_url`). `status` is one of `lost | stray_resident | sighted_temporary | found` — see `src/services/statusMeta.js` for labels/colors used throughout the UI. The six seed cats carry `is_seed: true` (see `seedData.js`); user-added cats omit it. `CatPopupContent` and `FeedPage` use this to show a "Demo" badge, so real reports stay visually distinguishable from placeholder data.
+- A **cat** is a persistent identity record (`id`, `name`, `status`, `temperament`, `description`, `needs_medical_attention`, `medical_details`, `primary_photo_url`). `status` is one of `lost | stray_resident | sighted_temporary | found` — see `src/services/statusMeta.js` for labels/colors used throughout the UI.
 - A **sighting** is a single geo-tagged report (`cat_id`, `latitude`/`longitude`, `sighting_time`, `photo_url`, `last_fed_date`, `notes`) linked to a cat. A cat can have many sightings; the map shows each cat's most recent one (see `latestSightingByCat` in `MapPage.jsx`).
 
 **Duplicate-cat matching pipeline** (this is the trickiest cross-file flow — read all three if touching report submission):
@@ -38,16 +38,12 @@ There is no test suite configured in this repo (no test runner, no `*.test.*`/`*
 **AI assistant:** `src/services/aiAssistant.js` wraps `@anthropic-ai/sdk`, called directly from the browser (`dangerouslyAllowBrowser: true`). The user's own Anthropic API key is stored client-side only (`src/hooks/useApiKey.js`, `localStorage`, never bundled/hardcoded) and entered via the key field in `AIChatPanel`. Without a key, `getAssistantReply` falls back to canned keyword-matched responses (`CANNED_RESPONSES`/`mockReply`) covering TNR, approaching skittish cats, kitten feeding, and wound triage — so the assistant UI is fully testable without a key.
 
 **Pages** (`src/pages/`, routed in `App.jsx` under the shared `Layout`):
-- `MapPage` — Leaflet map, drop-pin/click-to-report, status legend, dedup flow. `AutoLocate` (defined in this file, uses `useMap()`) recenters the map on the user's real geolocation the first time it resolves, without fighting later pans — falls back to `seedData.CENTER` (SF Mission District) until then or if geolocation is unavailable.
+- `MapPage` — Leaflet map, drop-pin/click-to-report, status legend, dedup flow.
 - `FeedPage` — paginated chronological feed of sightings.
 - `MissingPage` — report-a-lost-cat form (creates a cat with `status: 'lost'` + owner contact info).
-- `EmergencyPage` — nearest vets. Primary source is `src/services/vetLookup.js` (`findNearbyVets`), which live-queries OpenStreetMap's Overpass API (no key required) for real `amenity=veterinary` clinics within 25km, refetching only when the origin moves >1km to avoid spamming Overpass on GPS jitter. Falls back to `src/services/vetDirectory.js` (static placeholder clinics, fake NANP-555 phone numbers) if the live lookup fails or returns nothing — the UI shows a "Live results unavailable" note in that case. Also the entry point to `AIChatPanel`.
+- `EmergencyPage` — nearest vet clinics (`src/services/vetDirectory.js`, static placeholder data with fake NANP-555 phone numbers) plus entry point to `AIChatPanel`.
 
 **Geo utilities:** `src/services/geo.js` has the Haversine `distanceMeters`/`formatDistance` helpers used across matching, the feed, and emergency vet sorting. `src/hooks/useGeolocation.js` wraps `navigator.geolocation.watchPosition`.
-
-## Deployment
-
-Static build (`npm run build` → `dist/`), no backend to deploy. `vercel.json` sets the build/output commands and rewrites all paths to `index.html` so `BrowserRouter` routes work on direct load/refresh — needed for any static host that doesn't already do SPA fallback by default.
 
 ## Conventions
 
@@ -58,6 +54,7 @@ Static build (`npm run build` → `dist/`), no backend to deploy. `vercel.json` 
 ## Git workflow
 
 - Create a new branch for each feature/fix, don't work directly on main.
+- Before starting any change, fetch and check whether the branch is behind `master` (`git fetch origin master && git log HEAD..origin/master --oneline`); if it is, merge `master` in first so work builds on the latest code and avoids stale/conflicting docs or dependency versions.
 - Ask before committing — show the diff first.
 - Ask before pushing.
 - Open a PR when the work is ready for review, don't merge automatically.
