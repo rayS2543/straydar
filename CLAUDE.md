@@ -54,6 +54,7 @@ There is no test suite configured in this repo (no test runner, no `*.test.*`/`*
 ## Git workflow
 
 - Create a new branch for each feature/fix, don't work directly on main.
+- Before starting any change, fetch and check whether the branch is behind `master` (`git fetch origin master && git log HEAD..origin/master --oneline`); if it is, merge `master` in first so work builds on the latest code and avoids stale/conflicting docs or dependency versions.
 - Ask before committing — show the diff first.
 - Ask before pushing.
 - Open a PR when the work is ready for review, don't merge automatically.
