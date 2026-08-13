@@ -12,13 +12,20 @@ export function CatPopupContent({ cat, sighting }) {
       )}
       <div className="mb-1.5 flex items-center justify-between gap-2">
         <h3 className="font-semibold text-ink">{cat.name}</h3>
-        <span
-          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide"
-          style={{ backgroundColor: `${color}1a`, color }}
-        >
-          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
-          {statusLabel(cat.status)}
-        </span>
+        <div className="flex shrink-0 items-center gap-1.5">
+          {cat.is_seed && (
+            <span className="rounded-full bg-card-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+              Demo
+            </span>
+          )}
+          <span
+            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide"
+            style={{ backgroundColor: `${color}1a`, color }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
+            {statusLabel(cat.status)}
+          </span>
+        </div>
       </div>
       {cat.description && <p className="mb-1 text-sm text-muted">{cat.description}</p>}
       <p className="text-xs text-muted">
