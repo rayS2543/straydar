@@ -9,8 +9,8 @@ export function useReportSubmission() {
   const { addCat, addSighting, updateCat, findNearbySightings, getCatById } = useData()
   const [pending, setPending] = useState(null) // { values, candidates }
 
-  const createNewCat = (values) => {
-    const cat = addCat({
+  const createNewCat = async (values) => {
+    const cat = await addCat({
       name: values.name,
       status: values.status,
       description: values.description,
@@ -19,7 +19,7 @@ export function useReportSubmission() {
       medical_details: values.needsMedical ? values.medicalDetails : null,
       primary_photo_url: values.photoDataUrl,
     })
-    addSighting({
+    await addSighting({
       cat_id: cat.id,
       latitude: values.coords.latitude,
       longitude: values.coords.longitude,
@@ -30,8 +30,8 @@ export function useReportSubmission() {
     return cat
   }
 
-  const linkToExistingCat = (catId, values) => {
-    addSighting({
+  const linkToExistingCat = async (catId, values) => {
+    await addSighting({
       cat_id: catId,
       latitude: values.coords.latitude,
       longitude: values.coords.longitude,
@@ -40,14 +40,14 @@ export function useReportSubmission() {
       notes: values.description,
     })
     if (values.needsMedical) {
-      updateCat(catId, {
+      await updateCat(catId, {
         needs_medical_attention: true,
         medical_details: values.medicalDetails || undefined,
       })
     }
   }
 
-  const submitReport = (values) => {
+  const submitReport = async (values) => {
     const candidates = findDuplicateCandidates(
       { coords: values.coords, temperament: values.temperament, description: values.description },
       { findNearbySightings, getCatById },
@@ -58,19 +58,19 @@ export function useReportSubmission() {
       return { status: 'needs-review' }
     }
 
-    const cat = createNewCat(values)
+    const cat = await createNewCat(values)
     return { status: 'created', cat }
   }
 
-  const confirmSameCat = (catId) => {
+  const confirmSameCat = async (catId) => {
     if (!pending) return
-    linkToExistingCat(catId, pending.values)
+    await linkToExistingCat(catId, pending.values)
     setPending(null)
   }
 
-  const confirmNewCat = () => {
+  const confirmNewCat = async () => {
     if (!pending) return
-    createNewCat(pending.values)
+    await createNewCat(pending.values)
     setPending(null)
   }
 

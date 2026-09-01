@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Straydar (`stray-cat-app`) is a client-only React SPA for tracking and reporting stray/lost cats on a map. There is no backend: all data lives in the browser via `localStorage`, seeded with demo data on first load.
+Straydar (`stray-cat-app`) is a React SPA for tracking and reporting stray/lost cats on a map. Data is shared across all users in a Supabase (Postgres) backend — every cat and sighting is visible to everyone, not just the browser that created it.
 
 ## Commands
 
@@ -17,14 +17,23 @@ npm run lint      # run oxlint (see .oxlintrc.json)
 
 There is no test suite configured in this repo (no test runner, no `*.test.*`/`*.spec.*` files). Don't assume Jest/Vitest exists — if asked to add tests, a runner needs to be introduced first.
 
+### Backend setup (Supabase)
+
+1. Create a free project at [supabase.com](https://supabase.com).
+2. In the SQL editor, run the migrations in `supabase/migrations/` in order (`0001_init.sql` creates the schema/RLS policies, `0002_seed.sql` loads the demo cats/sightings).
+3. Copy `.env.example` to `.env` and fill in the project's URL and anon public key (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` — Project Settings → API). `.env` is gitignored.
+
 ## Architecture
 
 **Stack:** React 19 + Vite + React Router 7, Tailwind CSS v4 (via `@tailwindcss/vite`, config lives in `@theme` block in `src/index.css` — no `tailwind.config.js`), Leaflet/react-leaflet for the map, lucide-react for icons.
 
 **Data flow (single source of truth pattern):**
-- `src/services/db.js` is the persistence layer: reads/writes two `localStorage` keys (`straydar.cats.v1`, `straydar.sightings.v1`), seeding from `src/services/seedData.js` on first run.
-- `src/context/DataContext.jsx` (`DataProvider`/`useData()`) is the only place components should touch data. It holds `cats` and `sightings` in React state, mirrors every mutation to `localStorage` via `db.js`, and exposes the CRUD/query API: `addCat`, `updateCat`, `addSighting`, `findNearbySightings`, `getCatById`, `getSightingsForCat`, `reset`.
-- Components/pages never call `db.js` directly — they go through `useData()`.
+- `src/services/supabaseClient.js` creates the Supabase client from `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` (throws at import time if either is missing).
+- `src/services/db.js` is the persistence layer: thin async wrappers over Supabase queries (`fetchCats`, `fetchSightings`, `insertCat`, `updateCatRow`, `insertSighting`). No client-side ID generation or localStorage writes — the DB assigns UUIDs and timestamps.
+- `src/context/DataContext.jsx` (`DataProvider`/`useData()`) is the only place components should touch data. On mount it runs a one-time migration of any pre-Supabase `localStorage` data (see below), fetches `cats`/`sightings` into React state, and subscribes to Supabase Realtime so inserts/updates from other users merge into state live. It exposes `cats`, `sightings`, `loading`, `error`, and the CRUD/query API: `addCat`, `updateCat`, `addSighting` (all `async`), plus `findNearbySightings`, `getCatById`, `getSightingsForCat`.
+- Components/pages never call `db.js`/Supabase directly — they go through `useData()`, and must `await` the CRUD calls.
+- Auth is not enforced yet (anonymous read/write via permissive RLS policies), but `cats.owner_id`/`sightings.reporter_id` already exist as nullable FKs to `auth.users` so adding real auth later is a policy change, not a schema change — see the comments in `supabase/migrations/0001_init.sql`.
+- A browser's old `localStorage` cats/sightings (from before this backend existed) are uploaded once via `migrateLocalData()` in `DataContext.jsx`, gated on a `straydar.migrated.v1` flag; only non-seed (user-added) cats and their sightings are migrated.
 
 **Core domain model:**
 - A **cat** is a persistent identity record (`id`, `name`, `status`, `temperament`, `description`, `needs_medical_attention`, `medical_details`, `primary_photo_url`). `status` is one of `lost | stray_resident | sighted_temporary | found` — see `src/services/statusMeta.js` for labels/colors used throughout the UI.

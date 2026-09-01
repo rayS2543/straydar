@@ -24,6 +24,7 @@ export default function MissingPage() {
   const [form, setForm] = useState(emptyForm)
   const [coords, setCoords] = useState(null)
   const [submittedCat, setSubmittedCat] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
 
   const center = position ?? SEED_CENTER
   const update = (patch) => setForm((prev) => ({ ...prev, ...patch }))
@@ -40,29 +41,34 @@ export default function MissingPage() {
     if (position) setCoords(position)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!coords) return
+    if (!coords || submitting) return
+    setSubmitting(true)
 
-    const cat = addCat({
-      name: form.name.trim() || 'Unknown Cat',
-      status: 'lost',
-      description: form.description.trim(),
-      primary_photo_url: form.photoDataUrl,
-      owner_name: form.ownerName.trim() || null,
-      owner_contact: form.ownerContact.trim() || null,
-      microchip_number: form.microchipNumber.trim() || null,
-      reward_details: form.rewardDetails.trim() || null,
-    })
-    addSighting({
-      cat_id: cat.id,
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      photo_url: form.photoDataUrl,
-      notes: 'Last known location',
-    })
+    try {
+      const cat = await addCat({
+        name: form.name.trim() || 'Unknown Cat',
+        status: 'lost',
+        description: form.description.trim(),
+        primary_photo_url: form.photoDataUrl,
+        owner_name: form.ownerName.trim() || null,
+        owner_contact: form.ownerContact.trim() || null,
+        microchip_number: form.microchipNumber.trim() || null,
+        reward_details: form.rewardDetails.trim() || null,
+      })
+      await addSighting({
+        cat_id: cat.id,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        photo_url: form.photoDataUrl,
+        notes: 'Last known location',
+      })
 
-    setSubmittedCat(cat)
+      setSubmittedCat(cat)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (submittedCat) {
@@ -211,10 +217,10 @@ export default function MissingPage() {
 
         <button
           type="submit"
-          disabled={!coords}
+          disabled={!coords || submitting}
           className="w-full rounded-lg bg-brand py-2.5 text-sm font-medium text-white hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Submit Missing Report
+          {submitting ? 'Submitting…' : 'Submit Missing Report'}
         </button>
       </form>
     </div>

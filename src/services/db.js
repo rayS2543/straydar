@@ -1,54 +1,39 @@
-import { SEED_CATS, SEED_SIGHTINGS } from './seedData'
+import { supabase } from './supabaseClient'
 
-const KEYS = {
-  cats: 'straydar.cats.v1',
-  sightings: 'straydar.sightings.v1',
+export async function fetchCats() {
+  const { data, error } = await supabase.from('cats').select('*')
+  if (error) throw error
+  return data
 }
 
-export function genId(prefix = 'id') {
-  const rand =
-    typeof crypto !== 'undefined' && crypto.randomUUID
-      ? crypto.randomUUID()
-      : Math.random().toString(36).slice(2)
-  return `${prefix}-${rand}`
+export async function fetchSightings() {
+  const { data, error } = await supabase
+    .from('sightings')
+    .select('*')
+    .order('sighting_time', { ascending: false })
+  if (error) throw error
+  return data
 }
 
-function read(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return fallback
-    return JSON.parse(raw)
-  } catch {
-    return fallback
-  }
+export async function insertCat(cat) {
+  const { data, error } = await supabase.from('cats').insert(cat).select().single()
+  if (error) throw error
+  return data
 }
 
-function write(key, value) {
-  localStorage.setItem(key, JSON.stringify(value))
+export async function updateCatRow(catId, patch) {
+  const { data, error } = await supabase
+    .from('cats')
+    .update(patch)
+    .eq('id', catId)
+    .select()
+    .single()
+  if (error) throw error
+  return data
 }
 
-export function loadDatabase() {
-  const seeded = localStorage.getItem(KEYS.cats) !== null
-  if (!seeded) {
-    write(KEYS.cats, SEED_CATS)
-    write(KEYS.sightings, SEED_SIGHTINGS)
-  }
-  return {
-    cats: read(KEYS.cats, SEED_CATS),
-    sightings: read(KEYS.sightings, SEED_SIGHTINGS),
-  }
-}
-
-export function persistCats(cats) {
-  write(KEYS.cats, cats)
-}
-
-export function persistSightings(sightings) {
-  write(KEYS.sightings, sightings)
-}
-
-export function resetDatabase() {
-  write(KEYS.cats, SEED_CATS)
-  write(KEYS.sightings, SEED_SIGHTINGS)
-  return { cats: SEED_CATS, sightings: SEED_SIGHTINGS }
+export async function insertSighting(sighting) {
+  const { data, error } = await supabase.from('sightings').insert(sighting).select().single()
+  if (error) throw error
+  return data
 }
