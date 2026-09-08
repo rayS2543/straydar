@@ -13,9 +13,12 @@ npm run dev       # start Vite dev server (HMR)
 npm run build     # production build to dist/
 npm run preview   # preview the production build
 npm run lint      # run oxlint (see .oxlintrc.json)
+npm test          # run the Vitest suite (vitest run)
 ```
 
-There is no test suite configured in this repo (no test runner, no `*.test.*`/`*.spec.*` files). Don't assume Jest/Vitest exists — if asked to add tests, a runner needs to be introduced first.
+Vitest is configured via the `test` block in `vite.config.js` (no separate `vitest.config.js`). Test files live next to what they cover (`*.test.js`) — see `src/services/matching.test.js` and `src/services/geo.test.js` for the existing coverage and conventions. Only pure-function services are covered so far; nothing exercises React components/hooks yet, so don't assume `@testing-library/react` or a DOM environment are set up if asked to test a component.
+
+CI (`.github/workflows/ci.yml`) runs lint, test, and build on every push/PR to `master`.
 
 ### Backend setup (Supabase)
 
