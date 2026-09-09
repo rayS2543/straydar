@@ -12,6 +12,7 @@ const daysAgo = (d) => hoursAgo(d * 24)
 export const SEED_CATS = [
   {
     id: 'cat-1',
+    is_seed: true,
     name: 'Marmalade',
     status: 'stray_resident',
     description: 'Orange tabby, friendly, hangs out near the community garden.',
@@ -24,6 +25,7 @@ export const SEED_CATS = [
   },
   {
     id: 'cat-2',
+    is_seed: true,
     name: 'Shadow',
     status: 'stray_resident',
     description: 'Black shorthair, part of the alley colony behind the laundromat.',
@@ -36,6 +38,7 @@ export const SEED_CATS = [
   },
   {
     id: 'cat-3',
+    is_seed: true,
     name: 'Unknown Cat',
     status: 'sighted_temporary',
     description: 'Grey and white, seen once near the taqueria dumpsters.',
@@ -48,6 +51,7 @@ export const SEED_CATS = [
   },
   {
     id: 'cat-4',
+    is_seed: true,
     name: 'Biscuit',
     status: 'lost',
     description: 'Cream-colored longhair, microchipped, last seen wearing a blue collar.',
@@ -60,6 +64,7 @@ export const SEED_CATS = [
   },
   {
     id: 'cat-5',
+    is_seed: true,
     name: 'Patches',
     status: 'stray_resident',
     description: 'Calico, feeds at the colony feeding station on 24th St.',
@@ -72,6 +77,7 @@ export const SEED_CATS = [
   },
   {
     id: 'cat-6',
+    is_seed: true,
     name: 'Unknown Cat',
     status: 'found',
     description: 'Small tuxedo kitten, found wandering alone, currently fostered nearby.',

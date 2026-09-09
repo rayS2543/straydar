@@ -22,12 +22,19 @@ function FeedCard({ cat, sighting, distance }) {
       <div className="p-3">
         <div className="mb-1 flex items-center justify-between gap-2">
           <h3 className="font-semibold text-ink">{cat?.name ?? 'Unknown Cat'}</h3>
-          <span
-            className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
-            style={{ backgroundColor: `${statusColor(cat?.status)}1a`, color: statusColor(cat?.status) }}
-          >
-            {statusLabel(cat?.status)}
-          </span>
+          <div className="flex shrink-0 items-center gap-1.5">
+            {cat?.is_seed && (
+              <span className="rounded-full bg-card-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+                Demo
+              </span>
+            )}
+            <span
+              className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+              style={{ backgroundColor: `${statusColor(cat?.status)}1a`, color: statusColor(cat?.status) }}
+            >
+              {statusLabel(cat?.status)}
+            </span>
+          </div>
         </div>
         {sighting.notes && <p className="mb-1 text-sm text-muted">{sighting.notes}</p>}
         <div className="flex items-center justify-between text-xs text-faint">

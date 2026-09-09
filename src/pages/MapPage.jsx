@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Plus, LocateFixed } from 'lucide-react'
 import { useData } from '../context/DataContext'
@@ -12,6 +12,22 @@ import { AddReportModal } from '../components/map/AddReportModal'
 import { DedupModal } from '../components/map/DedupModal'
 import { CatPopupContent } from '../components/map/CatPopupContent'
 import { STATUS_META } from '../services/statusMeta'
+
+// Recenters the map on the user's real position the first time it resolves,
+// without fighting subsequent pans/watchPosition updates.
+function AutoLocate({ position }) {
+  const map = useMap()
+  const hasCentered = useRef(false)
+
+  useEffect(() => {
+    if (position && !hasCentered.current) {
+      hasCentered.current = true
+      map.setView([position.latitude, position.longitude], 15)
+    }
+  }, [position, map])
+
+  return null
+}
 
 function latestSightingByCat(sightings) {
   const map = new Map()
@@ -99,6 +115,7 @@ export default function MapPage() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ClickToPin onPin={setPendingPin} />
+        <AutoLocate position={position} />
 
         {markers.map(({ cat, sighting }) => (
           <Marker
