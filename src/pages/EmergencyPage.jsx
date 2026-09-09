@@ -1,14 +1,18 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { Phone, MapPin, MessageCircle } from 'lucide-react'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { VET_CLINICS } from '../services/vetDirectory'
 import { CENTER as SEED_CENTER } from '../services/seedData'
 import { distanceMeters, formatDistance } from '../services/geo'
-import { AIChatPanel } from '../components/chat/AIChatPanel'
+
+const AIChatPanel = lazy(() =>
+  import('../components/chat/AIChatPanel').then((m) => ({ default: m.AIChatPanel })),
+)
 
 export default function EmergencyPage() {
   const { position } = useGeolocation()
   const [chatOpen, setChatOpen] = useState(false)
+  const [chatLoaded, setChatLoaded] = useState(false)
   const origin = position ?? SEED_CENTER
 
   const nearestClinics = useMemo(() => {
@@ -31,7 +35,10 @@ export default function EmergencyPage() {
         </div>
         <button
           type="button"
-          onClick={() => setChatOpen(true)}
+          onClick={() => {
+            setChatLoaded(true)
+            setChatOpen(true)
+          }}
           className="flex shrink-0 items-center gap-2 rounded-full bg-brand px-4 py-2.5 text-sm font-medium text-white hover:brightness-95"
         >
           <MessageCircle size={16} />
@@ -67,7 +74,11 @@ export default function EmergencyPage() {
         ))}
       </ul>
 
-      <AIChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+      {chatLoaded && (
+        <Suspense fallback={null}>
+          <AIChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+        </Suspense>
+      )}
     </div>
   )
 }

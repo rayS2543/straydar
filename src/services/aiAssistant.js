@@ -5,7 +5,7 @@ export const SYSTEM_PROMPT =
   'how to approach a skittish cat safely, what to feed a kitten, and when a wound requires urgent ' +
   'veterinary care. Always advise professional help for severe medical emergencies.'
 
-const MODEL = 'claude-opus-4-8'
+const MODEL = 'claude-sonnet-5'
 
 const CANNED_RESPONSES = [
   {
