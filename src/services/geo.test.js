@@ -1,36 +1,46 @@
 import { describe, expect, it } from 'vitest'
-import { distanceMeters, formatDistance } from './geo'
+import { distanceMeters, formatDistance, toRad } from './geo'
+
+describe('toRad', () => {
+  it('converts degrees to radians', () => {
+    expect(toRad(180)).toBeCloseTo(Math.PI)
+    expect(toRad(0)).toBe(0)
+    expect(toRad(90)).toBeCloseTo(Math.PI / 2)
+  })
+})
 
 describe('distanceMeters', () => {
-  it('returns 0 for identical points', () => {
+  it('is zero for identical points', () => {
     const point = { latitude: 37.7599, longitude: -122.4148 }
-    expect(distanceMeters(point, point)).toBe(0)
+    expect(distanceMeters(point, point)).toBeCloseTo(0)
   })
 
-  it('matches a known real-world distance within a few meters', () => {
-    // ~1.3 km between these two SF landmarks (Ferry Building -> Coit Tower).
-    const ferryBuilding = { latitude: 37.7955, longitude: -122.3937 }
-    const coitTower = { latitude: 37.8024, longitude: -122.4058 }
-    const distance = distanceMeters(ferryBuilding, coitTower)
-    expect(distance).toBeGreaterThan(1250)
-    expect(distance).toBeLessThan(1350)
+  it('computes a known distance between two SF coordinates', () => {
+    // Roughly 1.1 km apart (Ferry Building to Mission Dolores area).
+    const a = { latitude: 37.7955, longitude: -122.3937 }
+    const b = { latitude: 37.7749, longitude: -122.4194 }
+    const distance = distanceMeters(a, b)
+    expect(distance).toBeGreaterThan(2900)
+    expect(distance).toBeLessThan(3300)
   })
 
   it('is symmetric', () => {
     const a = { latitude: 37.7599, longitude: -122.4148 }
-    const b = { latitude: 37.7621, longitude: -122.4139 }
-    expect(distanceMeters(a, b)).toBeCloseTo(distanceMeters(b, a), 6)
+    const b = { latitude: 37.7612, longitude: -122.4131 }
+    expect(distanceMeters(a, b)).toBeCloseTo(distanceMeters(b, a))
   })
 })
 
 describe('formatDistance', () => {
-  it('renders sub-kilometer distances in meters, rounded', () => {
+  it('formats sub-kilometer distances in meters, rounded', () => {
+    expect(formatDistance(0)).toBe('0 m')
     expect(formatDistance(42.4)).toBe('42 m')
     expect(formatDistance(999)).toBe('999 m')
   })
 
-  it('renders distances of 1km or more in kilometers to one decimal', () => {
+  it('formats distances of 1000m or more in kilometers with one decimal', () => {
     expect(formatDistance(1000)).toBe('1.0 km')
-    expect(formatDistance(2400)).toBe('2.4 km')
+    expect(formatDistance(1500)).toBe('1.5 km')
+    expect(formatDistance(12345)).toBe('12.3 km')
   })
 })

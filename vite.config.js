@@ -9,6 +9,8 @@ export default defineConfig({
     allowedHosts: ['.trycloudflare.com'],
   },
   test: {
-    environment: 'node',
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test/setup.js'],
   },
 })
