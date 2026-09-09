@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Phone, MapPin, MessageCircle, Loader2 } from 'lucide-react'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { VET_CLINICS } from '../services/vetDirectory'
 import { findNearbyVets } from '../services/vetLookup'
 import { CENTER as SEED_CENTER } from '../services/seedData'
 import { distanceMeters, formatDistance } from '../services/geo'
-import { AIChatPanel } from '../components/chat/AIChatPanel'
+
+const AIChatPanel = lazy(() =>
+  import('../components/chat/AIChatPanel').then((m) => ({ default: m.AIChatPanel })),
+)
 
 // Only refetch live vets once the origin has moved meaningfully, so GPS
 // jitter from watchPosition doesn't spam the Overpass API.
@@ -14,6 +17,7 @@ const REFETCH_THRESHOLD_METERS = 1000
 export default function EmergencyPage() {
   const { position } = useGeolocation()
   const [chatOpen, setChatOpen] = useState(false)
+  const [chatLoaded, setChatLoaded] = useState(false)
   const [clinics, setClinics] = useState([])
   const [loading, setLoading] = useState(true)
   const [usingFallback, setUsingFallback] = useState(false)
@@ -27,7 +31,6 @@ export default function EmergencyPage() {
     ) {
       return
     }
-    lastFetchOrigin.current = origin
 
     let cancelled = false
     setLoading(true)
@@ -36,6 +39,7 @@ export default function EmergencyPage() {
       .then((vets) => {
         if (cancelled) return
         if (vets.length === 0) throw new Error('No live results')
+        lastFetchOrigin.current = origin
         setClinics(
           vets
             .map((vet) => ({ ...vet, distance: distanceMeters(origin, vet) }))
@@ -46,6 +50,7 @@ export default function EmergencyPage() {
       })
       .catch(() => {
         if (cancelled) return
+        lastFetchOrigin.current = origin
         setClinics(
           VET_CLINICS.map((clinic) => ({ ...clinic, distance: distanceMeters(origin, clinic) }))
             .sort((a, b) => a.distance - b.distance)
@@ -73,7 +78,10 @@ export default function EmergencyPage() {
         </div>
         <button
           type="button"
-          onClick={() => setChatOpen(true)}
+          onClick={() => {
+            setChatLoaded(true)
+            setChatOpen(true)
+          }}
           className="flex shrink-0 items-center gap-2 rounded-full bg-brand px-4 py-2.5 text-sm font-medium text-white hover:brightness-95"
         >
           <MessageCircle size={16} />
@@ -126,7 +134,11 @@ export default function EmergencyPage() {
         ))}
       </ul>
 
-      <AIChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+      {chatLoaded && (
+        <Suspense fallback={null}>
+          <AIChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+        </Suspense>
+      )}
     </div>
   )
 }
