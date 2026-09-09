@@ -42,7 +42,7 @@ function latestSightingByCat(sightings) {
 }
 
 export default function MapPage() {
-  const { cats, sightings } = useData()
+  const { cats, sightings, loading } = useData()
   const { position } = useGeolocation()
   const { submitReport, pending, confirmSameCat, confirmNewCat, cancelPending } = useReportSubmission()
   const mapRef = useRef(null)
@@ -61,9 +61,9 @@ export default function MapPage() {
       .filter(Boolean)
   }, [cats, sightings])
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     setSubmitting(true)
-    const result = submitReport(values)
+    const result = await submitReport(values)
     setSubmitting(false)
     if (result.status === 'created') {
       setPendingPin(null)
@@ -72,13 +72,13 @@ export default function MapPage() {
     // and hands off to the DedupModal via the `pending` state below.
   }
 
-  const handleConfirmSame = (catId) => {
-    confirmSameCat(catId)
+  const handleConfirmSame = async (catId) => {
+    await confirmSameCat(catId)
     setPendingPin(null)
   }
 
-  const handleConfirmNew = () => {
-    confirmNewCat()
+  const handleConfirmNew = async () => {
+    await confirmNewCat()
     setPendingPin(null)
   }
 
@@ -103,6 +103,13 @@ export default function MapPage() {
 
   return (
     <div className="relative h-full w-full">
+      {loading && (
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] flex justify-center p-3">
+          <div className="rounded-full border border-line bg-card/95 px-3 py-1.5 text-xs font-medium text-muted shadow-sm backdrop-blur">
+            Loading map…
+          </div>
+        </div>
+      )}
       <MapContainer
         ref={mapRef}
         center={[initialCenter.latitude, initialCenter.longitude]}
