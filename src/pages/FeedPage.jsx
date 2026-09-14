@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { HeartPulse, MapPin, PawPrint } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useGeolocation } from '../hooks/useGeolocation'
+import { useDemoCats } from '../hooks/useDemoCats'
 import { distanceMeters, formatDistance } from '../services/geo'
 import { statusColor, statusLabel } from '../services/statusMeta'
 
@@ -62,28 +63,36 @@ export default function FeedPage() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const sentinelRef = useRef(null)
 
-  const sortedSightings = useMemo(
-    () => [...sightings].sort((a, b) => new Date(b.sighting_time) - new Date(a.sighting_time)),
-    [sightings],
-  )
+  // `is_seed` cats are the old static SF demo rows — they don't count as
+  // real reports, so they don't block the location-based demo fallback and
+  // don't show up hundreds of km from wherever the visitor actually is.
+  const realEntries = useMemo(() => {
+    return sightings
+      .map((sighting) => ({ sighting, cat: getCatById(sighting.cat_id) }))
+      .filter(({ cat }) => !cat?.is_seed)
+      .sort((a, b) => new Date(b.sighting.sighting_time) - new Date(a.sighting.sighting_time))
+  }, [sightings, getCatById])
+
+  const demoEntries = useDemoCats(position, realEntries.length > 0)
+  const entries = realEntries.length > 0 ? realEntries : demoEntries
 
   useEffect(() => {
     const sentinel = sentinelRef.current
     if (!sentinel) return
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, sortedSightings.length))
+      (observerEntries) => {
+        if (observerEntries[0].isIntersecting) {
+          setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, entries.length))
         }
       },
       { rootMargin: '200px' },
     )
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [sortedSightings.length])
+  }, [entries.length])
 
-  const visibleSightings = sortedSightings.slice(0, visibleCount)
+  const visibleEntries = entries.slice(0, visibleCount)
 
   return (
     <div className="mx-auto max-w-2xl p-4 sm:p-6">
@@ -91,17 +100,17 @@ export default function FeedPage() {
       <p className="mb-4 text-sm text-muted">Recent sightings and reports, newest first.</p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {visibleSightings.map((sighting) => (
+        {visibleEntries.map(({ sighting, cat }) => (
           <FeedCard
             key={sighting.id}
             sighting={sighting}
-            cat={getCatById(sighting.cat_id)}
+            cat={cat}
             distance={position ? distanceMeters(position, sighting) : null}
           />
         ))}
       </div>
 
-      {visibleCount < sortedSightings.length && (
+      {visibleCount < entries.length && (
         <div ref={sentinelRef} className="py-6 text-center text-sm text-faint">
           Loading more…
         </div>

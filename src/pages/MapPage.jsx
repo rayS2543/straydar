@@ -5,7 +5,7 @@ import { Plus, LocateFixed } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { useReportSubmission } from '../hooks/useReportSubmission'
-import { generateDemoCats } from '../services/demoData'
+import { useDemoCats } from '../hooks/useDemoCats'
 import { statusIcon, youAreHereIcon } from '../components/map/mapIcons'
 import { ClickToPin } from '../components/map/ClickToPin'
 import { AddReportModal } from '../components/map/AddReportModal'
@@ -33,9 +33,14 @@ export default function MapPage() {
   const [pendingPin, setPendingPin] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
-  const markers = useMemo(() => {
+  // `is_seed` cats are the old static SF demo rows from 0002_seed.sql —
+  // they don't count as "real" reports, so they never block the
+  // location-based demo fallback below, and don't show up hundreds of km
+  // from wherever someone actually opens the app.
+  const realMarkers = useMemo(() => {
     const latest = latestSightingByCat(sightings)
     return cats
+      .filter((cat) => !cat.is_seed)
       .map((cat) => {
         const sighting = latest.get(cat.id)
         return sighting ? { cat, sighting } : null
@@ -43,21 +48,11 @@ export default function MapPage() {
       .filter(Boolean)
   }, [cats, sightings])
 
-  // Client-side-only filler for a fresh deploy with no real reports yet —
-  // never written to Supabase, so it's invisible to every other browser.
-  // Always anchored to the visitor's real position (never a hardcoded
-  // fallback city) — locked onto the first resolved position (rounded, so
-  // GPS jitter doesn't regenerate it) rather than following it live.
-  const demoOriginKey = position
-    ? `${position.latitude.toFixed(3)},${position.longitude.toFixed(3)}`
-    : null
-  const showDemo = !loading && markers.length === 0 && !!demoOriginKey
-  const demoMarkers = useMemo(() => {
-    if (!showDemo) return []
-    const [latitude, longitude] = demoOriginKey.split(',').map(Number)
-    const { cats: demoCats, sightings: demoSightings } = generateDemoCats({ latitude, longitude })
-    return demoCats.map((cat, index) => ({ cat, sighting: demoSightings[index] }))
-  }, [showDemo, demoOriginKey])
+  // Client-side-only filler for when there are no real reports yet — never
+  // written to Supabase, so it's invisible to every other browser. Always
+  // anchored to the visitor's real position.
+  const demoMarkers = useDemoCats(position, !loading && realMarkers.length > 0)
+  const showDemo = demoMarkers.length > 0
 
   const handleSubmit = async (values) => {
     setSubmitting(true)
@@ -150,7 +145,7 @@ export default function MapPage() {
         />
         <ClickToPin onPin={setPendingPin} />
 
-        {[...markers, ...demoMarkers].map(({ cat, sighting }) => (
+        {[...realMarkers, ...demoMarkers].map(({ cat, sighting }) => (
           <Marker
             key={cat.id}
             position={[sighting.latitude, sighting.longitude]}
