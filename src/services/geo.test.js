@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { distanceMeters, formatDistance, toRad } from './geo'
+import { distanceMeters, formatDistance, offsetCoords, toRad } from './geo'
 
 describe('toRad', () => {
   it('converts degrees to radians', () => {
@@ -28,6 +28,28 @@ describe('distanceMeters', () => {
     const a = { latitude: 37.7599, longitude: -122.4148 }
     const b = { latitude: 37.7612, longitude: -122.4131 }
     expect(distanceMeters(a, b)).toBeCloseTo(distanceMeters(b, a))
+  })
+})
+
+describe('offsetCoords', () => {
+  it('lands the requested distance away from the origin', () => {
+    const origin = { latitude: 37.7599, longitude: -122.4148 }
+    const point = offsetCoords(origin, 200, 45)
+    expect(distanceMeters(origin, point)).toBeCloseTo(200, 0)
+  })
+
+  it('moves north for a bearing of 0', () => {
+    const origin = { latitude: 37.7599, longitude: -122.4148 }
+    const point = offsetCoords(origin, 200, 0)
+    expect(point.latitude).toBeGreaterThan(origin.latitude)
+    expect(point.longitude).toBeCloseTo(origin.longitude, 5)
+  })
+
+  it('moves east for a bearing of 90', () => {
+    const origin = { latitude: 37.7599, longitude: -122.4148 }
+    const point = offsetCoords(origin, 200, 90)
+    expect(point.longitude).toBeGreaterThan(origin.longitude)
+    expect(point.latitude).toBeCloseTo(origin.latitude, 3)
   })
 })
 
