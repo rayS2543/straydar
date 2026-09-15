@@ -10,8 +10,8 @@ const EmergencyPage = lazy(() => import('./pages/EmergencyPage'))
 
 export default function App() {
   return (
-    <DataProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <DataProvider>
         <Suspense fallback={null}>
           <Routes>
             <Route element={<Layout />}>
@@ -19,10 +19,14 @@ export default function App() {
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/missing" element={<MissingPage />} />
               <Route path="/emergency" element={<EmergencyPage />} />
+              <Route path="/demo" element={<MapPage />} />
+              <Route path="/demo/feed" element={<FeedPage />} />
+              <Route path="/demo/missing" element={<MissingPage />} />
+              <Route path="/demo/emergency" element={<EmergencyPage />} />
             </Route>
           </Routes>
         </Suspense>
-      </BrowserRouter>
-    </DataProvider>
+      </DataProvider>
+    </BrowserRouter>
   )
 }

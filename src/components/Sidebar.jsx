@@ -1,5 +1,6 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { MapPin, Rss, Search, Stethoscope, PawPrint } from 'lucide-react'
+import { useDemoMode, DEMO_BASE } from '../hooks/useDemoMode'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Map', icon: MapPin, end: true },
@@ -9,10 +10,13 @@ const NAV_ITEMS = [
 ]
 
 function NavItems({ onNavigate, layout }) {
+  const demo = useDemoMode()
+  const prefix = demo ? DEMO_BASE : ''
+
   return NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
     <NavLink
       key={to}
-      to={to}
+      to={to === '/' ? prefix || '/' : `${prefix}${to}`}
       end={end}
       onClick={onNavigate}
       className={({ isActive }) =>
@@ -34,6 +38,7 @@ function NavItems({ onNavigate, layout }) {
 }
 
 export function DesktopSidebar() {
+  const demo = useDemoMode()
   return (
     <aside className="hidden md:flex md:w-60 md:flex-col md:border-r md:border-line md:bg-card md:px-3 md:py-5">
       <div className="mb-6 flex items-center gap-2.5 px-2">
@@ -45,6 +50,11 @@ export function DesktopSidebar() {
       <nav className="flex flex-1 flex-col gap-1">
         <NavItems layout="stacked" />
       </nav>
+      {!demo && (
+        <Link to={DEMO_BASE} className="mb-2 px-3 py-2 text-sm font-medium text-brand hover:underline">
+          Try the demo
+        </Link>
+      )}
       <p className="px-2 text-xs text-faint">
         Map, report, and help stray &amp; lost cats nearby.
       </p>

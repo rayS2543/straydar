@@ -1,7 +1,7 @@
 import { HeartPulse } from 'lucide-react'
 import { statusColor, statusLabel, TEMPERAMENT_LABELS } from '../../services/statusMeta'
 
-export function CatPopupContent({ cat, sighting }) {
+export function CatPopupContent({ cat, sighting, onViewDetails }) {
   const photo = sighting.photo_url || cat.primary_photo_url
   const color = statusColor(cat.status)
 
@@ -43,6 +43,15 @@ export function CatPopupContent({ cat, sighting }) {
         <p className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-status-lost">
           <HeartPulse size={13} /> Needs medical care
         </p>
+      )}
+      {onViewDetails && (
+        <button
+          type="button"
+          onClick={() => onViewDetails(cat.id)}
+          className="mt-2 w-full rounded-lg border border-line py-1.5 text-xs font-medium text-ink hover:bg-card-soft"
+        >
+          View timeline
+        </button>
       )}
     </div>
   )

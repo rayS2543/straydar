@@ -2,6 +2,27 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { fetchCats, fetchSightings, insertCat, insertSighting, updateCatRow } from '../services/db'
 import { supabase } from '../services/supabaseClient'
 import { distanceMeters } from '../services/geo'
+import { generateDemoCats, DEMO_CENTER } from '../services/demoData'
+import { useDemoMode } from '../hooks/useDemoMode'
+
+const DEFAULT_CAT = {
+  name: 'Unknown Cat',
+  status: 'sighted_temporary',
+  description: '',
+  temperament: 'unknown',
+  needs_medical_attention: false,
+  medical_details: null,
+  primary_photo_url: null,
+}
+
+const DEFAULT_SIGHTING = {
+  cat_id: null,
+  reporter_id: null,
+  sighting_time: new Date().toISOString(),
+  photo_url: null,
+  last_fed_date: null,
+  notes: '',
+}
 
 const DataContext = createContext(null)
 
@@ -60,12 +81,26 @@ function upsertById(setState, row) {
 }
 
 export function DataProvider({ children }) {
+  const demo = useDemoMode()
   const [cats, setCats] = useState([])
   const [sightings, setSightings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // Demo mode never touches Supabase: it seeds a fixed, reproducible
+  // neighborhood into local state, and every CRUD call below mutates only
+  // that local state, so nothing a demo visitor does is ever visible to
+  // real users or written to the shared backend.
   useEffect(() => {
+    if (demo) {
+      const { cats: demoCats, sightings: demoSightings } = generateDemoCats(DEMO_CENTER)
+      setCats(demoCats)
+      setSightings(demoSightings)
+      setError(null)
+      setLoading(false)
+      return
+    }
+
     let cancelled = false
 
     async function init() {
@@ -112,39 +147,30 @@ export function DataProvider({ children }) {
       cancelled = true
       supabase.removeChannel(channel)
     }
-  }, [])
+  }, [demo])
 
   const addCat = async (catData) => {
-    const cat = await insertCat({
-      name: 'Unknown Cat',
-      status: 'sighted_temporary',
-      description: '',
-      temperament: 'unknown',
-      needs_medical_attention: false,
-      medical_details: null,
-      primary_photo_url: null,
-      ...catData,
-    })
+    const fields = { ...DEFAULT_CAT, ...catData }
+    const cat = demo
+      ? { id: crypto.randomUUID(), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), ...fields }
+      : await insertCat(fields)
     upsertById(setCats, cat)
     return cat
   }
 
   const updateCat = async (catId, patch) => {
-    const cat = await updateCatRow(catId, patch)
+    const cat = demo
+      ? { ...cats.find((c) => c.id === catId), ...patch, updated_at: new Date().toISOString() }
+      : await updateCatRow(catId, patch)
     upsertById(setCats, cat)
     return cat
   }
 
   const addSighting = async (sightingData) => {
-    const sighting = await insertSighting({
-      cat_id: null,
-      reporter_id: null,
-      sighting_time: new Date().toISOString(),
-      photo_url: null,
-      last_fed_date: null,
-      notes: '',
-      ...sightingData,
-    })
+    const fields = { ...DEFAULT_SIGHTING, ...sightingData }
+    const sighting = demo
+      ? { id: crypto.randomUUID(), created_at: new Date().toISOString(), ...fields }
+      : await insertSighting(fields)
     upsertById(setSightings, sighting)
     return sighting
   }

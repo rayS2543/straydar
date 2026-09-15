@@ -6,11 +6,14 @@ import { useData } from '../context/DataContext'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { useReportSubmission } from '../hooks/useReportSubmission'
 import { useDemoCats } from '../hooks/useDemoCats'
+import { useDemoMode } from '../hooks/useDemoMode'
+import { DEMO_CENTER } from '../services/demoData'
 import { statusIcon, youAreHereIcon } from '../components/map/mapIcons'
 import { ClickToPin } from '../components/map/ClickToPin'
 import { AddReportModal } from '../components/map/AddReportModal'
 import { DedupModal } from '../components/map/DedupModal'
 import { CatPopupContent } from '../components/map/CatPopupContent'
+import { CatDetailModal } from '../components/map/CatDetailModal'
 import { STATUS_META } from '../services/statusMeta'
 
 function latestSightingByCat(sightings) {
@@ -26,8 +29,13 @@ function latestSightingByCat(sightings) {
 }
 
 export default function MapPage() {
-  const { cats, sightings, loading } = useData()
-  const { position, error: geoError } = useGeolocation()
+  const { cats, sightings, loading, updateCat, getCatById, getSightingsForCat } = useData()
+  const [selectedCatId, setSelectedCatId] = useState(null)
+  const demo = useDemoMode()
+  const { position: geoPosition, error: geoError } = useGeolocation()
+  // /demo never blocks on location access — it always has DEMO_CENTER to fall
+  // back to, so the demo is one click, no permission prompt required.
+  const position = demo ? geoPosition || DEMO_CENTER : geoPosition
   const { submitReport, pending, confirmSameCat, confirmNewCat, cancelPending } = useReportSubmission()
   const mapRef = useRef(null)
   const [pendingPin, setPendingPin] = useState(null)
@@ -40,18 +48,19 @@ export default function MapPage() {
   const realMarkers = useMemo(() => {
     const latest = latestSightingByCat(sightings)
     return cats
-      .filter((cat) => !cat.is_seed)
+      .filter((cat) => demo || !cat.is_seed)
       .map((cat) => {
         const sighting = latest.get(cat.id)
         return sighting ? { cat, sighting } : null
       })
       .filter(Boolean)
-  }, [cats, sightings])
+  }, [cats, sightings, demo])
 
   // Client-side-only filler for when there are no real reports yet — never
   // written to Supabase, so it's invisible to every other browser. Always
-  // anchored to the visitor's real position.
-  const demoMarkers = useDemoCats(position, !loading && realMarkers.length > 0)
+  // anchored to the visitor's real position. Not used on /demo: there, the
+  // demo neighborhood already comes from DataContext's demo-mode cats.
+  const demoMarkers = useDemoCats(position, demo || (!loading && realMarkers.length > 0))
   const showDemo = demoMarkers.length > 0
 
   const handleSubmit = async (values) => {
@@ -94,7 +103,7 @@ export default function MapPage() {
     mapRef.current.flyTo([position.latitude, position.longitude], 16)
   }
 
-  if (geoError) {
+  if (geoError && !demo) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
         <p className="text-sm font-medium text-ink">Location access is needed to show cats near you.</p>
@@ -145,7 +154,19 @@ export default function MapPage() {
         />
         <ClickToPin onPin={setPendingPin} />
 
-        {[...realMarkers, ...demoMarkers].map(({ cat, sighting }) => (
+        {realMarkers.map(({ cat, sighting }) => (
+          <Marker
+            key={cat.id}
+            position={[sighting.latitude, sighting.longitude]}
+            icon={statusIcon(cat.status)}
+          >
+            <Popup>
+              <CatPopupContent cat={cat} sighting={sighting} onViewDetails={setSelectedCatId} />
+            </Popup>
+          </Marker>
+        ))}
+
+        {demoMarkers.map(({ cat, sighting }) => (
           <Marker
             key={cat.id}
             position={[sighting.latitude, sighting.longitude]}
@@ -225,6 +246,18 @@ export default function MapPage() {
           onConfirmSame={handleConfirmSame}
           onConfirmNew={handleConfirmNew}
           onCancel={handleCancelDedup}
+        />
+      )}
+
+      {selectedCatId && (
+        <CatDetailModal
+          cat={getCatById(selectedCatId)}
+          sightings={getSightingsForCat(selectedCatId)}
+          onMarkReunited={async (catId) => {
+            await updateCat(catId, { status: 'found' })
+            setSelectedCatId(null)
+          }}
+          onClose={() => setSelectedCatId(null)}
         />
       )}
     </div>
