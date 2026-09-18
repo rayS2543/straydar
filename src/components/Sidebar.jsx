@@ -1,6 +1,7 @@
 import { NavLink, Link } from 'react-router-dom'
 import { MapPin, Rss, Search, Stethoscope, PawPrint } from 'lucide-react'
 import { useDemoMode, DEMO_BASE } from '../hooks/useDemoMode'
+import { AuthStatus } from './auth/AuthStatus'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Map', icon: MapPin, end: true },
@@ -51,9 +52,14 @@ export function DesktopSidebar() {
         <NavItems layout="stacked" />
       </nav>
       {!demo && (
-        <Link to={DEMO_BASE} className="mb-2 px-3 py-2 text-sm font-medium text-brand hover:underline">
-          Try the demo
-        </Link>
+        <>
+          <Link to={DEMO_BASE} className="mb-2 px-3 py-2 text-sm font-medium text-brand hover:underline">
+            Try the demo
+          </Link>
+          <div className="mb-2 px-3">
+            <AuthStatus />
+          </div>
+        </>
       )}
       <p className="px-2 text-xs text-faint">
         Map, report, and help stray &amp; lost cats nearby.

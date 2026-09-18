@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PawPrint } from 'lucide-react'
 import { useDemoMode, DEMO_BASE } from '../hooks/useDemoMode'
+import { AuthStatus } from './auth/AuthStatus'
 
 export function MobileHeader() {
   const demo = useDemoMode()
@@ -11,9 +12,12 @@ export function MobileHeader() {
       </span>
       <span className="flex-1 text-base font-semibold text-ink">Straydar</span>
       {!demo && (
-        <Link to={DEMO_BASE} className="text-xs font-medium text-brand">
-          Try the demo
-        </Link>
+        <>
+          <Link to={DEMO_BASE} className="text-xs font-medium text-brand">
+            Try the demo
+          </Link>
+          <AuthStatus />
+        </>
       )}
     </header>
   )

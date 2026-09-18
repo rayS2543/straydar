@@ -1,7 +1,16 @@
-import { X, PawPrint } from 'lucide-react'
+import { X, PawPrint, Bell, BellOff } from 'lucide-react'
 import { statusColor, statusLabel } from '../../services/statusMeta'
 
-export function CatDetailModal({ cat, sightings, onMarkReunited, onClose }) {
+export function CatDetailModal({
+  cat,
+  sightings,
+  onMarkReunited,
+  onClose,
+  canFollow,
+  isFollowing,
+  onFollow,
+  onUnfollow,
+}) {
   const photo = cat.primary_photo_url || sightings[0]?.photo_url
   const color = statusColor(cat.status)
 
@@ -19,14 +28,26 @@ export function CatDetailModal({ cat, sightings, onMarkReunited, onClose }) {
               {statusLabel(cat.status)}
             </span>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-full p-1.5 text-muted hover:bg-card-soft"
-            aria-label="Close"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            {canFollow && (
+              <button
+                type="button"
+                onClick={isFollowing ? onUnfollow : onFollow}
+                className="flex items-center gap-1 rounded-full border border-line px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-card-soft"
+              >
+                {isFollowing ? <BellOff size={14} /> : <Bell size={14} />}
+                {isFollowing ? 'Following' : 'Follow'}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full p-1.5 text-muted hover:bg-card-soft"
+              aria-label="Close"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         {photo && <img src={photo} alt={cat.name} className="mb-3 h-40 w-full rounded-lg object-cover" />}

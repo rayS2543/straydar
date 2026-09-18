@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Camera, MapPin, LocateFixed, CheckCircle2 } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useGeolocation } from '../hooks/useGeolocation'
+import { useDemoMode } from '../hooks/useDemoMode'
+import { useAuth } from '../context/AuthContext'
 import { CENTER as SEED_CENTER } from '../services/seedData'
 import { MiniLocationPicker } from '../components/map/MiniLocationPicker'
 
@@ -19,6 +21,8 @@ const emptyForm = {
 export default function MissingPage() {
   const { addCat, addSighting } = useData()
   const { position } = useGeolocation()
+  const demo = useDemoMode()
+  const { user, openAuthModal } = useAuth()
   const navigate = useNavigate()
 
   const [form, setForm] = useState(emptyForm)
@@ -44,6 +48,10 @@ export default function MissingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!coords || submitting) return
+    if (!demo && !user) {
+      openAuthModal()
+      return
+    }
     setSubmitting(true)
 
     try {
@@ -215,6 +223,9 @@ export default function MissingPage() {
           </div>
         </div>
 
+        {!demo && !user && (
+          <p className="text-xs text-muted">You'll be asked to sign in before this report is submitted.</p>
+        )}
         <button
           type="submit"
           disabled={!coords || submitting}

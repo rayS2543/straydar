@@ -4,6 +4,7 @@ import { supabase } from '../services/supabaseClient'
 import { distanceMeters } from '../services/geo'
 import { generateDemoCats, DEMO_CENTER } from '../services/demoData'
 import { useDemoMode } from '../hooks/useDemoMode'
+import { useAuth } from './AuthContext'
 
 const DEFAULT_CAT = {
   name: 'Unknown Cat',
@@ -82,6 +83,7 @@ function upsertById(setState, row) {
 
 export function DataProvider({ children }) {
   const demo = useDemoMode()
+  const { user } = useAuth()
   const [cats, setCats] = useState([])
   const [sightings, setSightings] = useState([])
   const [loading, setLoading] = useState(true)
@@ -150,7 +152,7 @@ export function DataProvider({ children }) {
   }, [demo])
 
   const addCat = async (catData) => {
-    const fields = { ...DEFAULT_CAT, ...catData }
+    const fields = { ...DEFAULT_CAT, ...catData, ...(demo ? {} : { owner_id: user?.id ?? null }) }
     const cat = demo
       ? { id: crypto.randomUUID(), created_at: new Date().toISOString(), updated_at: new Date().toISOString(), ...fields }
       : await insertCat(fields)
@@ -167,7 +169,11 @@ export function DataProvider({ children }) {
   }
 
   const addSighting = async (sightingData) => {
-    const fields = { ...DEFAULT_SIGHTING, ...sightingData }
+    const fields = {
+      ...DEFAULT_SIGHTING,
+      ...sightingData,
+      ...(demo ? {} : { reporter_id: user?.id ?? null }),
+    }
     const sighting = demo
       ? { id: crypto.randomUUID(), created_at: new Date().toISOString(), ...fields }
       : await insertSighting(fields)

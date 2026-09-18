@@ -8,6 +8,8 @@ import { useReportSubmission } from '../hooks/useReportSubmission'
 import { useDemoCats } from '../hooks/useDemoCats'
 import { useDemoMode } from '../hooks/useDemoMode'
 import { DEMO_CENTER } from '../services/demoData'
+import { useAuth } from '../context/AuthContext'
+import { useNotifications } from '../context/NotificationsContext'
 import { statusIcon, youAreHereIcon } from '../components/map/mapIcons'
 import { ClickToPin } from '../components/map/ClickToPin'
 import { AddReportModal } from '../components/map/AddReportModal'
@@ -32,6 +34,8 @@ export default function MapPage() {
   const { cats, sightings, loading, updateCat, getCatById, getSightingsForCat } = useData()
   const [selectedCatId, setSelectedCatId] = useState(null)
   const demo = useDemoMode()
+  const { user, openAuthModal } = useAuth()
+  const { followedCatIds, follow, unfollow } = useNotifications()
   const { position: geoPosition, error: geoError } = useGeolocation()
   // /demo never blocks on location access — it always has DEMO_CENTER to fall
   // back to, so the demo is one click, no permission prompt required.
@@ -89,9 +93,19 @@ export default function MapPage() {
     setPendingPin(null)
   }
 
+  // Reporting on the real map requires being signed in (RLS enforces this
+  // server-side too); /demo stays fully anonymous regardless of auth state.
+  const requestPin = (coords) => {
+    if (!demo && !user) {
+      openAuthModal()
+      return
+    }
+    setPendingPin(coords)
+  }
+
   const handleAddClick = () => {
     const center = mapRef.current?.getCenter()
-    setPendingPin(
+    requestPin(
       center
         ? { latitude: center.lat, longitude: center.lng }
         : { latitude: position.latitude, longitude: position.longitude },
@@ -152,7 +166,7 @@ export default function MapPage() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ClickToPin onPin={setPendingPin} />
+        <ClickToPin onPin={requestPin} />
 
         {realMarkers.map(({ cat, sighting }) => (
           <Marker
@@ -254,10 +268,18 @@ export default function MapPage() {
           cat={getCatById(selectedCatId)}
           sightings={getSightingsForCat(selectedCatId)}
           onMarkReunited={async (catId) => {
+            if (!demo && !user) {
+              openAuthModal()
+              return
+            }
             await updateCat(catId, { status: 'found' })
             setSelectedCatId(null)
           }}
           onClose={() => setSelectedCatId(null)}
+          canFollow={!demo}
+          isFollowing={followedCatIds.has(selectedCatId)}
+          onFollow={() => (user ? follow(selectedCatId) : openAuthModal())}
+          onUnfollow={() => unfollow(selectedCatId)}
         />
       )}
     </div>
