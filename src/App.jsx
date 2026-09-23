@@ -1,6 +1,9 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import { DataProvider } from './context/DataContext'
+import { NotificationsProvider } from './context/NotificationsContext'
+import { AuthModal } from './components/auth/AuthModal'
 import { Layout } from './components/Layout'
 
 const MapPage = lazy(() => import('./pages/MapPage'))
@@ -10,19 +13,28 @@ const EmergencyPage = lazy(() => import('./pages/EmergencyPage'))
 
 export default function App() {
   return (
-    <DataProvider>
-      <BrowserRouter>
-        <Suspense fallback={null}>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<MapPage />} />
-              <Route path="/feed" element={<FeedPage />} />
-              <Route path="/missing" element={<MissingPage />} />
-              <Route path="/emergency" element={<EmergencyPage />} />
-            </Route>
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </DataProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <DataProvider>
+          <NotificationsProvider>
+            <AuthModal />
+            <Suspense fallback={null}>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<MapPage />} />
+                  <Route path="/feed" element={<FeedPage />} />
+                  <Route path="/missing" element={<MissingPage />} />
+                  <Route path="/emergency" element={<EmergencyPage />} />
+                  <Route path="/demo" element={<MapPage />} />
+                  <Route path="/demo/feed" element={<FeedPage />} />
+                  <Route path="/demo/missing" element={<MissingPage />} />
+                  <Route path="/demo/emergency" element={<EmergencyPage />} />
+                </Route>
+              </Routes>
+            </Suspense>
+          </NotificationsProvider>
+        </DataProvider>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }

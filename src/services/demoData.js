@@ -7,6 +7,10 @@
 
 import { offsetCoords } from './geo'
 
+// Fixed neighborhood for the standalone /demo route, so the walkthrough is
+// reproducible for every visitor instead of anchored to their own GPS.
+export const DEMO_CENTER = { latitude: 37.7955, longitude: -122.3937 }
+
 const hoursAgo = (h) => new Date(Date.now() - h * 60 * 60 * 1000).toISOString()
 const daysAgo = (d) => hoursAgo(d * 24)
 

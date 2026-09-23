@@ -9,7 +9,7 @@ const STRENGTH_LABEL = {
 }
 
 function CandidateCard({ candidate, onConfirm }) {
-  const { cat, sighting, distance, strength } = candidate
+  const { cat, sighting, distance, strength, reasons } = candidate
   const photo = sighting.photo_url || cat.primary_photo_url
 
   return (
@@ -34,6 +34,7 @@ function CandidateCard({ candidate, onConfirm }) {
         <p className="truncate text-xs text-muted">{cat.description || 'No description'}</p>
         <p className="text-xs text-faint">
           {formatDistance(distance)} away · {STRENGTH_LABEL[strength]}
+          {reasons?.length > 0 ? ` · ${reasons.join(', ')}` : ''}
         </p>
       </div>
       <button

@@ -29,6 +29,11 @@ make community pet-tracking actually useful in practice:
   add your own Anthropic key.
 - **Nearest emergency vets**, pulled live from OpenStreetMap with a static
   fallback list.
+- **A `/demo` walkthrough** — an isolated version of the app (`/demo`,
+  `/demo/feed`, `/demo/missing`, `/demo/emergency`) seeded with local demo
+  cats ringed around your real location, so you can try the reunion flow
+  without touching shared production data (`src/hooks/useDemoMode.js`,
+  `src/services/demoData.js`).
 
 | AI rescue assistant | Missing-cat report |
 | --- | --- |
