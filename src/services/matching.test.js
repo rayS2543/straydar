@@ -51,8 +51,9 @@ describe('attributeMatchScore', () => {
       { temperament: 'feral', description: 'Calico with a limp' },
       { temperament: 'feral', description: 'Calico cat limping badly' },
     )
-    // +2 for matching temperament, +1 for the shared "calico" keyword.
-    expect(score).toBe(3)
+    // +2 for matching temperament, +2 for the shared "calico" and "limp"
+    // keywords ("limping" stems to "limp" under vocabulary normalization).
+    expect(score).toBe(4)
     expect(reasons).toHaveLength(2)
   })
 })

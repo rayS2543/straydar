@@ -1,0 +1,1520 @@
+{
+  "dataset": {
+    "totalPairs": 60,
+    "shouldMerge": 30,
+    "shouldNotMerge": 30
+  },
+  "operatingPoints": {
+    "strong_score_ge_2": {
+      "tp": 26,
+      "fp": 7,
+      "tn": 23,
+      "fn": 4,
+      "precision": 0.788,
+      "recall": 0.867,
+      "f1": 0.825,
+      "accuracy": 0.817
+    },
+    "possible_or_better_score_ge_1": {
+      "tp": 28,
+      "fp": 13,
+      "tn": 17,
+      "fn": 2,
+      "precision": 0.683,
+      "recall": 0.933,
+      "f1": 0.789,
+      "accuracy": 0.75
+    },
+    "any_candidate_within_150m": {
+      "tp": 28,
+      "fp": 26,
+      "tn": 4,
+      "fn": 2,
+      "precision": 0.519,
+      "recall": 0.933,
+      "f1": 0.667,
+      "accuracy": 0.533
+    }
+  },
+  "failuresAtStrong": [
+    {
+      "id": "P29",
+      "shouldMerge": true,
+      "category": "vague-rereport",
+      "distanceM": 50,
+      "score": 1,
+      "strength": "possible",
+      "flagged": true,
+      "reasons": [
+        "shares \"orange\""
+      ],
+      "rationale": "Same cat; vague re-report shares only orange."
+    },
+    {
+      "id": "P30",
+      "shouldMerge": true,
+      "category": "vague-rereport",
+      "distanceM": 90,
+      "score": 1,
+      "strength": "possible",
+      "flagged": true,
+      "reasons": [
+        "shares \"black\""
+      ],
+      "rationale": "Same cat; vague re-report shares only black."
+    },
+    {
+      "id": "P16",
+      "shouldMerge": true,
+      "category": "outside-radius",
+      "distanceM": 165,
+      "score": null,
+      "strength": null,
+      "flagged": false,
+      "reasons": [],
+      "rationale": "Same cat, but the re-sighting is 165 m from the prior sighting."
+    },
+    {
+      "id": "P17",
+      "shouldMerge": true,
+      "category": "outside-radius",
+      "distanceM": 240,
+      "score": null,
+      "strength": null,
+      "flagged": false,
+      "reasons": [],
+      "rationale": "Same cat, but the re-sighting is 240 m away."
+    },
+    {
+      "id": "N10",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 35,
+      "score": 6,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "same temperament",
+        "shares \"orange, tabby, white, paw\""
+      ],
+      "rationale": "Different sibling in the same colony; generic description is identical."
+    },
+    {
+      "id": "N11",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 45,
+      "score": 5,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "same temperament",
+        "shares \"black, green, eye\""
+      ],
+      "rationale": "Different black cat; near identical generic description."
+    },
+    {
+      "id": "N12",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 55,
+      "score": 3,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "shares \"calico, orange, patche\""
+      ],
+      "rationale": "Different calico in the same colony."
+    },
+    {
+      "id": "N17",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 65,
+      "score": 2,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "same temperament",
+        "shares \"tabby, tail\"",
+        "conflicting colors (brown vs grey)"
+      ],
+      "rationale": "Different tabbies; tabby and tail are shared, colors differ but nothing subtracts points."
+    },
+    {
+      "id": "N22",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 90,
+      "score": 3,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "shares \"grey, white, paw\""
+      ],
+      "rationale": "Different grey and white cats with the same traits in different distribution."
+    },
+    {
+      "id": "N28",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 60,
+      "score": 2,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "same temperament",
+        "shares \"ear, tabby\"",
+        "conflicting colors (brown vs grey)"
+      ],
+      "rationale": "Two different TNR colony cats, both ear-tipped tabbies."
+    },
+    {
+      "id": "N29",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 30,
+      "score": 4,
+      "strength": "strong",
+      "flagged": true,
+      "reasons": [
+        "same temperament",
+        "shares \"white, orange\""
+      ],
+      "rationale": "Different orange and white cats; same color words reversed."
+    }
+  ],
+  "allResults": [
+    {
+      "id": "P01",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 25,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws and striped tail"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange tabby, white paws, striped tail near alley"
+      },
+      "rationale": "Same cat, near-identical wording.",
+      "actualDistanceM": 25,
+      "flagged": true,
+      "score": 8,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"orange, tabby, white, paw, strip, tail\""
+      ]
+    },
+    {
+      "id": "P02",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 40,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Black cat with green eyes and torn left ear"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Black cat, green eyes, torn ear"
+      },
+      "rationale": "Same cat, near-identical wording.",
+      "actualDistanceM": 40,
+      "flagged": true,
+      "score": 7,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"black, green, eye, torn, ear\""
+      ]
+    },
+    {
+      "id": "P03",
+      "shouldMerge": true,
+      "category": "word-form-change",
+      "distanceM": 60,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Large grey tabby with a limp in hind leg"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Grey tabby limping, large build"
+      },
+      "rationale": "Same cat; limp becomes limping, which the tokenizer cannot equate.",
+      "actualDistanceM": 60,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "shares \"large, grey, tabby, limp\""
+      ]
+    },
+    {
+      "id": "P04",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 30,
+      "existing": {
+        "temperament": "feral",
+        "description": "Calico with orange and black patches, small size"
+      },
+      "incoming": {
+        "temperament": "feral",
+        "description": "Small calico, orange patches"
+      },
+      "rationale": "Same cat.",
+      "actualDistanceM": 30,
+      "flagged": true,
+      "score": 6,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"calico, orange, patche, small\""
+      ]
+    },
+    {
+      "id": "P05",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 80,
+      "existing": {
+        "temperament": "unknown",
+        "description": "White cat with one blue eye and one green eye"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "White cat, heterochromia, blue and green eyes"
+      },
+      "rationale": "Same cat; eye becomes eyes.",
+      "actualDistanceM": 80,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "shares \"white, blue, eye, green\""
+      ]
+    },
+    {
+      "id": "P06",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 15,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Siamese with dark points and blue eyes, very vocal"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Vocal Siamese, blue eyes"
+      },
+      "rationale": "Same cat.",
+      "actualDistanceM": 15,
+      "flagged": true,
+      "score": 6,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"siamese, blue, eye, vocal\""
+      ]
+    },
+    {
+      "id": "P07",
+      "shouldMerge": true,
+      "category": "word-form-change",
+      "distanceM": 110,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Tiny black kitten with white chest spot"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Small black kitten, white spot on chest"
+      },
+      "rationale": "Same kitten; tiny becomes small.",
+      "actualDistanceM": 110,
+      "flagged": true,
+      "score": 5,
+      "strength": "strong",
+      "reasons": [
+        "shares \"black, kitten, white, chest, spot\""
+      ]
+    },
+    {
+      "id": "P08",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 50,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Orange cat with freckled nose and missing tail tip"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange cat missing tail tip, freckles on nose"
+      },
+      "rationale": "Same cat; freckled becomes freckles.",
+      "actualDistanceM": 50,
+      "flagged": true,
+      "score": 5,
+      "strength": "strong",
+      "reasons": [
+        "shares \"orange, nose, mis, tail, tip\""
+      ]
+    },
+    {
+      "id": "P09",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 90,
+      "existing": {
+        "temperament": "feral",
+        "description": "Brown tabby with notched right ear, TNR clipped"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Brown tabby, ear tipped, clipped"
+      },
+      "rationale": "Same TNR cat.",
+      "actualDistanceM": 90,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "shares \"brown, tabby, ear, clip\""
+      ]
+    },
+    {
+      "id": "P10",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 20,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Long haired white and grey cat, fluffy tail"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Fluffy long haired grey and white cat"
+      },
+      "rationale": "Same cat, word order changed.",
+      "actualDistanceM": 20,
+      "flagged": true,
+      "score": 7,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"long, hair, white, grey, fluffy\""
+      ]
+    },
+    {
+      "id": "P14",
+      "shouldMerge": true,
+      "category": "temperament-reobserved",
+      "distanceM": 55,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Black and white tuxedo cat with pink nose"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Tuxedo cat, pink nose, black and white coat"
+      },
+      "rationale": "Same cat; second observer read it as skittish.",
+      "actualDistanceM": 55,
+      "flagged": true,
+      "score": 5,
+      "strength": "strong",
+      "reasons": [
+        "shares \"black, white, tuxedo, pink, nose\""
+      ]
+    },
+    {
+      "id": "P15",
+      "shouldMerge": true,
+      "category": "near-radius-edge-inside",
+      "distanceM": 130,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange tabby white paws"
+      },
+      "rationale": "Same cat, 130 m away.",
+      "actualDistanceM": 130,
+      "flagged": true,
+      "score": 6,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"orange, tabby, white, paw\""
+      ]
+    },
+    {
+      "id": "P18",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 100,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Dilute calico, pale orange and grey patches"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Pale calico with grey patches"
+      },
+      "rationale": "Same cat.",
+      "actualDistanceM": 100,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "shares \"calico, pale, grey, patche\""
+      ]
+    },
+    {
+      "id": "P19",
+      "shouldMerge": true,
+      "category": "word-form-change",
+      "distanceM": 65,
+      "existing": {
+        "temperament": "feral",
+        "description": "All black cat, yellow eyes, scar on nose"
+      },
+      "incoming": {
+        "temperament": "feral",
+        "description": "Black cat, yellow eyes, scarred nose"
+      },
+      "rationale": "Same cat; scar becomes scarred.",
+      "actualDistanceM": 65,
+      "flagged": true,
+      "score": 7,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"black, yellow, eye, scar, nose\""
+      ]
+    },
+    {
+      "id": "P20",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 85,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Medium tabby, striped legs, white belly"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Tabby with striped legs and white belly"
+      },
+      "rationale": "Same cat.",
+      "actualDistanceM": 85,
+      "flagged": true,
+      "score": 5,
+      "strength": "strong",
+      "reasons": [
+        "shares \"tabby, strip, leg, white, belly\""
+      ]
+    },
+    {
+      "id": "P21",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 30,
+      "existing": {
+        "temperament": "unknown",
+        "description": "White cat with black spot on head"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "White cat, black spot, head marking"
+      },
+      "rationale": "Same cat.",
+      "actualDistanceM": 30,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "shares \"white, black, spot, head\""
+      ]
+    },
+    {
+      "id": "P23",
+      "shouldMerge": true,
+      "category": "word-form-change",
+      "distanceM": 95,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Longhair orange cat, matted fur"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Orange long haired cat, tangled coat"
+      },
+      "rationale": "Same cat; longhair splits, matted becomes tangled.",
+      "actualDistanceM": 95,
+      "flagged": true,
+      "score": 3,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"orange\""
+      ]
+    },
+    {
+      "id": "P24",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 45,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Spotted brown cat, Bengal markings"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Brown spotted cat with rosettes"
+      },
+      "rationale": "Same cat.",
+      "actualDistanceM": 45,
+      "flagged": true,
+      "score": 2,
+      "strength": "strong",
+      "reasons": [
+        "shares \"spot, brown\""
+      ]
+    },
+    {
+      "id": "P25",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 120,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Cream colored cat with blue collar"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Cream cat wearing a blue collar"
+      },
+      "rationale": "Same collared cat.",
+      "actualDistanceM": 120,
+      "flagged": true,
+      "score": 3,
+      "strength": "strong",
+      "reasons": [
+        "shares \"cream, blue, collar\""
+      ]
+    },
+    {
+      "id": "P26",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 15,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Three legged grey tabby"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Grey tabby missing a leg"
+      },
+      "rationale": "Same three-legged cat; legged does not match leg.",
+      "actualDistanceM": 15,
+      "flagged": true,
+      "score": 3,
+      "strength": "strong",
+      "reasons": [
+        "shares \"leg, grey, tabby\""
+      ]
+    },
+    {
+      "id": "P27",
+      "shouldMerge": true,
+      "category": "near-radius-edge-inside",
+      "distanceM": 140,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Orange tabby with torn ear"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Orange tabby torn ear"
+      },
+      "rationale": "Same cat, 140 m away.",
+      "actualDistanceM": 140,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "shares \"orange, tabby, torn, ear\""
+      ]
+    },
+    {
+      "id": "P28",
+      "shouldMerge": true,
+      "category": "clear-resighting",
+      "distanceM": 60,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Silver tabby, green collar, bell"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Silver tabby with green collar"
+      },
+      "rationale": "Same collared cat.",
+      "actualDistanceM": 60,
+      "flagged": true,
+      "score": 6,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"silver, tabby, green, collar\""
+      ]
+    },
+    {
+      "id": "P11",
+      "shouldMerge": true,
+      "category": "synonym-paraphrase",
+      "distanceM": 45,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Grey cat with a limp"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Gray cat limping badly"
+      },
+      "rationale": "Same cat; grey/gray and limp/limping share no token.",
+      "actualDistanceM": 45,
+      "flagged": true,
+      "score": 2,
+      "strength": "strong",
+      "reasons": [
+        "shares \"grey, limp\""
+      ]
+    },
+    {
+      "id": "P12",
+      "shouldMerge": true,
+      "category": "synonym-paraphrase",
+      "distanceM": 35,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Small tortoiseshell with a torn ear"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Petite tortie, notched ear"
+      },
+      "rationale": "Same cat; only the generic word ear is shared.",
+      "actualDistanceM": 35,
+      "flagged": true,
+      "score": 3,
+      "strength": "strong",
+      "reasons": [
+        "shares \"small, tortoiseshell, ear\""
+      ]
+    },
+    {
+      "id": "P13",
+      "shouldMerge": true,
+      "category": "synonym-paraphrase",
+      "distanceM": 70,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Kitten, ginger, very thin"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Young orange cat, skinny"
+      },
+      "rationale": "Same kitten; ginger/young/thin all paraphrased away.",
+      "actualDistanceM": 70,
+      "flagged": true,
+      "score": 2,
+      "strength": "strong",
+      "reasons": [
+        "shares \"orange, thin\""
+      ]
+    },
+    {
+      "id": "P22",
+      "shouldMerge": true,
+      "category": "word-form-change",
+      "distanceM": 75,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Cat with a limp and a clipped ear"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Limping cat, ear tipped"
+      },
+      "rationale": "Same cat; only ear is shared.",
+      "actualDistanceM": 75,
+      "flagged": true,
+      "score": 2,
+      "strength": "strong",
+      "reasons": [
+        "shares \"limp, ear\""
+      ]
+    },
+    {
+      "id": "P29",
+      "shouldMerge": true,
+      "category": "vague-rereport",
+      "distanceM": 50,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Friendly orange cat"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Orange cat seen again"
+      },
+      "rationale": "Same cat; vague re-report shares only orange.",
+      "actualDistanceM": 50,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"orange\""
+      ]
+    },
+    {
+      "id": "P30",
+      "shouldMerge": true,
+      "category": "vague-rereport",
+      "distanceM": 90,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Small black cat"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Black cat"
+      },
+      "rationale": "Same cat; vague re-report shares only black.",
+      "actualDistanceM": 90,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"black\""
+      ]
+    },
+    {
+      "id": "P16",
+      "shouldMerge": true,
+      "category": "outside-radius",
+      "distanceM": 165,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange tabby white paws"
+      },
+      "rationale": "Same cat, but the re-sighting is 165 m from the prior sighting.",
+      "actualDistanceM": 165,
+      "flagged": false,
+      "score": null,
+      "strength": null,
+      "reasons": []
+    },
+    {
+      "id": "P17",
+      "shouldMerge": true,
+      "category": "outside-radius",
+      "distanceM": 240,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Calico with orange patches"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Calico with orange patches"
+      },
+      "rationale": "Same cat, but the re-sighting is 240 m away.",
+      "actualDistanceM": 240,
+      "flagged": false,
+      "score": null,
+      "strength": null,
+      "reasons": []
+    },
+    {
+      "id": "N01",
+      "shouldMerge": false,
+      "category": "outside-radius-lookalike",
+      "distanceM": 400,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "rationale": "Different cat 400 m away; identical generic wording.",
+      "actualDistanceM": 400,
+      "flagged": false,
+      "score": null,
+      "strength": null,
+      "reasons": []
+    },
+    {
+      "id": "N02",
+      "shouldMerge": false,
+      "category": "outside-radius-lookalike",
+      "distanceM": 300,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Black cat with green eyes"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Black cat with green eyes"
+      },
+      "rationale": "Different cat 300 m away.",
+      "actualDistanceM": 300,
+      "flagged": false,
+      "score": null,
+      "strength": null,
+      "reasons": []
+    },
+    {
+      "id": "N03",
+      "shouldMerge": false,
+      "category": "clearly-different-nearby",
+      "distanceM": 30,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Black cat with green eyes"
+      },
+      "rationale": "Two different cats 30 m apart, no shared traits.",
+      "actualDistanceM": 30,
+      "flagged": true,
+      "score": -2,
+      "strength": "nearby",
+      "reasons": [
+        "conflicting colors (orange, white vs black, green)"
+      ]
+    },
+    {
+      "id": "N04",
+      "shouldMerge": false,
+      "category": "clearly-different-nearby",
+      "distanceM": 50,
+      "existing": {
+        "temperament": "feral",
+        "description": "White longhair adult"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Black shorthair kitten"
+      },
+      "rationale": "Two different cats, no shared traits.",
+      "actualDistanceM": 50,
+      "flagged": true,
+      "score": -2,
+      "strength": "nearby",
+      "reasons": [
+        "conflicting colors (white vs black)"
+      ]
+    },
+    {
+      "id": "N15",
+      "shouldMerge": false,
+      "category": "clearly-different-far",
+      "distanceM": 200,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Black cat"
+      },
+      "rationale": "Different cats, also outside radius.",
+      "actualDistanceM": 200,
+      "flagged": false,
+      "score": null,
+      "strength": null,
+      "reasons": []
+    },
+    {
+      "id": "N16",
+      "shouldMerge": false,
+      "category": "clearly-different-nearby",
+      "distanceM": 20,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with striped tail"
+      },
+      "incoming": {
+        "temperament": "feral",
+        "description": "Black cat with yellow eyes"
+      },
+      "rationale": "Two different cats 20 m apart.",
+      "actualDistanceM": 20,
+      "flagged": true,
+      "score": -2,
+      "strength": "nearby",
+      "reasons": [
+        "conflicting colors (orange vs black)"
+      ]
+    },
+    {
+      "id": "N19",
+      "shouldMerge": false,
+      "category": "clearly-different-nearby",
+      "distanceM": 40,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Tortoiseshell, small"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Siamese, large, vocal"
+      },
+      "rationale": "Two different cats, no shared traits.",
+      "actualDistanceM": 40,
+      "flagged": true,
+      "score": 0,
+      "strength": "nearby",
+      "reasons": []
+    },
+    {
+      "id": "N23",
+      "shouldMerge": false,
+      "category": "clearly-different-nearby",
+      "distanceM": 130,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Silver tabby with green collar"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Brown cat with torn ear"
+      },
+      "rationale": "Two different cats near the radius edge.",
+      "actualDistanceM": 130,
+      "flagged": true,
+      "score": -2,
+      "strength": "nearby",
+      "reasons": [
+        "conflicting colors (green vs brown)"
+      ]
+    },
+    {
+      "id": "N25",
+      "shouldMerge": false,
+      "category": "outside-radius-lookalike",
+      "distanceM": 160,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Orange tabby with white paws"
+      },
+      "rationale": "Different cat just outside radius; identical generic wording.",
+      "actualDistanceM": 160,
+      "flagged": false,
+      "score": null,
+      "strength": null,
+      "reasons": []
+    },
+    {
+      "id": "N30",
+      "shouldMerge": false,
+      "category": "clearly-different-nearby",
+      "distanceM": 35,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Spotted Bengal, brown rosettes"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Plain grey shorthair"
+      },
+      "rationale": "Two different cats, no shared traits.",
+      "actualDistanceM": 35,
+      "flagged": true,
+      "score": -2,
+      "strength": "nearby",
+      "reasons": [
+        "conflicting colors (brown vs grey)"
+      ]
+    },
+    {
+      "id": "N05",
+      "shouldMerge": false,
+      "category": "shared-temperament-only",
+      "distanceM": 40,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Black cat with green eyes"
+      },
+      "rationale": "Different cats; only temperament matches.",
+      "actualDistanceM": 40,
+      "flagged": true,
+      "score": 0,
+      "strength": "nearby",
+      "reasons": [
+        "same temperament",
+        "conflicting colors (orange, white vs black, green)"
+      ]
+    },
+    {
+      "id": "N06",
+      "shouldMerge": false,
+      "category": "shared-temperament-only",
+      "distanceM": 70,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Grey tabby, striped"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "White cat, blue eyes"
+      },
+      "rationale": "Different cats; only temperament matches.",
+      "actualDistanceM": 70,
+      "flagged": true,
+      "score": 0,
+      "strength": "nearby",
+      "reasons": [
+        "same temperament",
+        "conflicting colors (grey vs white, blue)"
+      ]
+    },
+    {
+      "id": "N07",
+      "shouldMerge": false,
+      "category": "shared-temperament-only",
+      "distanceM": 25,
+      "existing": {
+        "temperament": "feral",
+        "description": "Calico with patches"
+      },
+      "incoming": {
+        "temperament": "feral",
+        "description": "Black kitten"
+      },
+      "rationale": "Different cats; only temperament matches.",
+      "actualDistanceM": 25,
+      "flagged": true,
+      "score": 0,
+      "strength": "nearby",
+      "reasons": [
+        "same temperament",
+        "conflicting colors (calico vs black)"
+      ]
+    },
+    {
+      "id": "N24",
+      "shouldMerge": false,
+      "category": "shared-temperament-only",
+      "distanceM": 145,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Cream cat with red collar"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Black cat, yellow eyes"
+      },
+      "rationale": "Different cats near radius edge; only temperament matches.",
+      "actualDistanceM": 145,
+      "flagged": true,
+      "score": 0,
+      "strength": "nearby",
+      "reasons": [
+        "same temperament",
+        "conflicting colors (cream, red vs black)"
+      ]
+    },
+    {
+      "id": "N08",
+      "shouldMerge": false,
+      "category": "one-shared-generic-word",
+      "distanceM": 60,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Orange tabby"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Orange cat with black stripes"
+      },
+      "rationale": "Different orange cats; only orange is shared.",
+      "actualDistanceM": 60,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"orange\""
+      ]
+    },
+    {
+      "id": "N09",
+      "shouldMerge": false,
+      "category": "negation-not-handled",
+      "distanceM": 80,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Black cat with white paws"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Black cat, yellow eyes, no white markings"
+      },
+      "rationale": "Different black cats. Black is shared, and white is also counted as shared even though the new report explicitly denies white markings. The engine has no negation handling.",
+      "actualDistanceM": 80,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"black\""
+      ]
+    },
+    {
+      "id": "N13",
+      "shouldMerge": false,
+      "category": "one-shared-generic-word",
+      "distanceM": 90,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Brown tabby, striped tail"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Grey tabby, white belly"
+      },
+      "rationale": "Different tabbies; only tabby is shared.",
+      "actualDistanceM": 90,
+      "flagged": true,
+      "score": -1,
+      "strength": "nearby",
+      "reasons": [
+        "shares \"tabby\"",
+        "conflicting colors (brown vs grey, white)"
+      ]
+    },
+    {
+      "id": "N14",
+      "shouldMerge": false,
+      "category": "one-shared-generic-word",
+      "distanceM": 100,
+      "existing": {
+        "temperament": "unknown",
+        "description": "White cat with black spot on head"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "White cat, all white, blue eyes"
+      },
+      "rationale": "Different white cats; only white is shared.",
+      "actualDistanceM": 100,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"white\""
+      ]
+    },
+    {
+      "id": "N20",
+      "shouldMerge": false,
+      "category": "one-shared-generic-word",
+      "distanceM": 55,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Small black kitten"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Small white adult cat"
+      },
+      "rationale": "Different cats; only the size word small is shared.",
+      "actualDistanceM": 55,
+      "flagged": true,
+      "score": -1,
+      "strength": "nearby",
+      "reasons": [
+        "shares \"small\"",
+        "conflicting colors (black vs white)"
+      ]
+    },
+    {
+      "id": "N21",
+      "shouldMerge": false,
+      "category": "one-shared-generic-word",
+      "distanceM": 85,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Small black cat"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Large black cat"
+      },
+      "rationale": "Different black cats of different size; only black is shared.",
+      "actualDistanceM": 85,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"black\""
+      ]
+    },
+    {
+      "id": "N27",
+      "shouldMerge": false,
+      "category": "one-shared-generic-word",
+      "distanceM": 45,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Cat with pink collar and bell"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Cat with pink nose"
+      },
+      "rationale": "Different cats; only pink is shared, on different objects.",
+      "actualDistanceM": 45,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "shares \"pink\""
+      ]
+    },
+    {
+      "id": "N10",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 35,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange tabby with white paws"
+      },
+      "rationale": "Different sibling in the same colony; generic description is identical.",
+      "actualDistanceM": 35,
+      "flagged": true,
+      "score": 6,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"orange, tabby, white, paw\""
+      ]
+    },
+    {
+      "id": "N11",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 45,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Black cat, green eyes"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Black cat, green eyes, white toe"
+      },
+      "rationale": "Different black cat; near identical generic description.",
+      "actualDistanceM": 45,
+      "flagged": true,
+      "score": 5,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"black, green, eye\""
+      ]
+    },
+    {
+      "id": "N12",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 55,
+      "existing": {
+        "temperament": "unknown",
+        "description": "Calico, orange and black patches"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "Calico with orange patches"
+      },
+      "rationale": "Different calico in the same colony.",
+      "actualDistanceM": 55,
+      "flagged": true,
+      "score": 3,
+      "strength": "strong",
+      "reasons": [
+        "shares \"calico, orange, patche\""
+      ]
+    },
+    {
+      "id": "N17",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 65,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Brown tabby, long tail"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Grey tabby, short tail"
+      },
+      "rationale": "Different tabbies; tabby and tail are shared, colors differ but nothing subtracts points.",
+      "actualDistanceM": 65,
+      "flagged": true,
+      "score": 2,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"tabby, tail\"",
+        "conflicting colors (brown vs grey)"
+      ]
+    },
+    {
+      "id": "N18",
+      "shouldMerge": false,
+      "category": "shared-object-word",
+      "distanceM": 75,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Cat with red collar"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Cat with blue collar, bell"
+      },
+      "rationale": "Different collared cats; collar plus temperament match, collar color differs with no penalty.",
+      "actualDistanceM": 75,
+      "flagged": true,
+      "score": 1,
+      "strength": "possible",
+      "reasons": [
+        "same temperament",
+        "shares \"collar\"",
+        "conflicting colors (red vs blue)"
+      ]
+    },
+    {
+      "id": "N22",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 90,
+      "existing": {
+        "temperament": "skittish",
+        "description": "Grey cat, white paws"
+      },
+      "incoming": {
+        "temperament": "unknown",
+        "description": "White cat, grey saddle, paws down"
+      },
+      "rationale": "Different grey and white cats with the same traits in different distribution.",
+      "actualDistanceM": 90,
+      "flagged": true,
+      "score": 3,
+      "strength": "strong",
+      "reasons": [
+        "shares \"grey, white, paw\""
+      ]
+    },
+    {
+      "id": "N26",
+      "shouldMerge": false,
+      "category": "shared-coat-words",
+      "distanceM": 110,
+      "existing": {
+        "temperament": "friendly",
+        "description": "Long haired grey cat"
+      },
+      "incoming": {
+        "temperament": "skittish",
+        "description": "Long haired black cat"
+      },
+      "rationale": "Different cats; only coat length wording is shared, color differs with no penalty.",
+      "actualDistanceM": 110,
+      "flagged": true,
+      "score": 0,
+      "strength": "nearby",
+      "reasons": [
+        "shares \"long, hair\"",
+        "conflicting colors (grey vs black)"
+      ]
+    },
+    {
+      "id": "N28",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 60,
+      "existing": {
+        "temperament": "feral",
+        "description": "Notched ear, brown tabby"
+      },
+      "incoming": {
+        "temperament": "feral",
+        "description": "Clipped ear, grey tabby"
+      },
+      "rationale": "Two different TNR colony cats, both ear-tipped tabbies.",
+      "actualDistanceM": 60,
+      "flagged": true,
+      "score": 2,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"ear, tabby\"",
+        "conflicting colors (brown vs grey)"
+      ]
+    },
+    {
+      "id": "N29",
+      "shouldMerge": false,
+      "category": "lookalike-colony",
+      "distanceM": 30,
+      "existing": {
+        "temperament": "friendly",
+        "description": "White and orange cat"
+      },
+      "incoming": {
+        "temperament": "friendly",
+        "description": "Orange and white cat, spot on tail"
+      },
+      "rationale": "Different orange and white cats; same color words reversed.",
+      "actualDistanceM": 30,
+      "flagged": true,
+      "score": 4,
+      "strength": "strong",
+      "reasons": [
+        "same temperament",
+        "shares \"white, orange\""
+      ]
+    }
+  ]
+}
